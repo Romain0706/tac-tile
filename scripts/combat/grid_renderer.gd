@@ -12,8 +12,8 @@ const GRID_LINE_COLOR: Color = Color(0.4, 0.4, 0.5, 0.8)
 const GRID_LINE_WIDTH: float = 1.0
 const GRID_BACKGROUND_COLOR: Color = Color(0.1, 0.1, 0.15, 0.6)
 
-# Dependencies
-@export var grid_system: GridSystem
+# Dependencies (GridSystem is RefCounted, cannot be @export)
+var grid_system: GridSystem = null
 
 # State
 var _cells: Array[GridCell] = []
