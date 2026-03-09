@@ -52,7 +52,12 @@ func _on_resources_changed(_type: String, _amount: int) -> void:
 
 
 func _on_run_pressed() -> void:
-	print("Run button pressed - TODO: Navigate to run selection")
+	print("Run button pressed - Navigating to combat test")
+	# Navigate to combat scene for grid testing
+	if UIManager:
+		UIManager.change_scene("res://scenes/combat/combat.tscn")
+	else:
+		get_tree().change_scene_to_file("res://scenes/combat/combat.tscn")
 
 
 func _on_team_pressed() -> void:
