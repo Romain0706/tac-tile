@@ -84,7 +84,7 @@ func add_diamonds(amount: int) -> void:
 
 
 ## Start a new run with the given team preset
-func start_run(team_preset_id: String) -> void:
+func start_run(_team_preset_id: String) -> void:
 	current_phase = GamePhase.RUN
 	run_started.emit()
 	# RunState will handle the actual run initialization

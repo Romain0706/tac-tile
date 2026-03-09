@@ -55,7 +55,7 @@ func heal(amount: int) -> void:
 ## Revive this unit with a percentage of max HP
 func revive(hp_percent: float = 0.5) -> void:
 	is_alive = true
-	current_hp = int(max_hp * clampf(hp_percent, 0.0, 1.0))
+	current_hp = int(float(max_hp) * clampf(hp_percent, 0.0, 1.0))
 
 
 ## Apply base stats from UnitData
@@ -70,12 +70,12 @@ func _apply_base_stats(unit_data: UnitData) -> void:
 
 ## Scale stats based on current level
 func scale_stats(base_stats: Dictionary) -> void:
-	var scale := 1.0 + (level - 1) * 0.2
-	max_hp = int(base_stats.get("hp", 100) * scale)
-	atk = int(base_stats.get("atk", 10) * scale)
-	def_stat = int(base_stats.get("def", 10) * scale)
-	matk = int(base_stats.get("matk", 10) * scale)
-	mdef = int(base_stats.get("mdef", 10) * scale)
+	var scale: float = 1.0 + (level - 1) * 0.2
+	max_hp = int(float(base_stats.get("hp", 100)) * scale)
+	atk = int(float(base_stats.get("atk", 10)) * scale)
+	def_stat = int(float(base_stats.get("def", 10)) * scale)
+	matk = int(float(base_stats.get("matk", 10)) * scale)
+	mdef = int(float(base_stats.get("mdef", 10)) * scale)
 	# Don't modify current_hp on stat scale (player must heal)
 
 

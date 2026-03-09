@@ -9,7 +9,7 @@ extends Resource
 @export var current_node_id: String = ""
 @export var map_seed: int = 0
 @export var nodes: Array = []  # Array of dictionaries
-@export var team: Array[RunUnit] = []  # RunUnit resources
+@export var team: Array[RunUnit] = []
 @export var accumulated_rewards: Dictionary = {}
 @export var run_start_time: int = 0
 @export var save_version: int = 1

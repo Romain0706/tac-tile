@@ -90,7 +90,7 @@ func get_default_preset() -> TeamPreset:
 	var default := TeamPreset.new()
 	default.id = "default"
 	default.name = "Team 1"
-	default.created_timestamp = Time.get_unix_time_from_system()
+	default.created_timestamp = int(Time.get_unix_time_from_system())
 	add_team_preset(default)
 	return default
 

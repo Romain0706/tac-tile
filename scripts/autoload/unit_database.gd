@@ -51,7 +51,13 @@ func get_unit(unit_id: String) -> UnitData:
 func get_all_units() -> Array[UnitData]:
 	if not _loaded:
 		load_units()
-	return _units.values() as Array[UnitData]
+
+	var result: Array[UnitData] = []
+	for unit in _units.values():
+		var unit_data := unit as UnitData
+		if unit_data:
+			result.append(unit_data)
+	return result
 
 
 ## Get units filtered by rarity (3, 4, or 5 stars)

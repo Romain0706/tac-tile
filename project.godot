@@ -13,9 +13,9 @@ config_version=5
 config/name="tac'tile"
 config/description="A roguelite tactical RPG with pincer-based combat"
 config/version="0.1.0"
+run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.6", "Mobile")
 config/icon="res://icon.svg"
-run/main_scene="res://scenes/main.tscn"
 
 [autoload]
 
@@ -30,24 +30,22 @@ AudioManager="*res://scripts/autoload/audio_manager.gd"
 
 window/size/viewport_width=720
 window/size/viewport_height=1280
+window/size/mode=2
 window/size/window_width_override=360
 window/size/window_height_override=640
-window/size/resizable=true
-window/size/mode=2
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
 window/handheld/orientation=1
 
 [input]
 
 touch_drag={
 "deadzone": 0.5,
-"events": [Object(InputEventScreenDrag,"resource_local_to_scene":false,"resource_name":"","device":-1,"index":-1,"pressed":false,"canceled":false,"position":Vector2(0, 0),"relative":Vector2(0, 0),"velocity":Vector2(0, 0),"pressure":0.0,"tilt":Vector2(0, 0),"pen_inverted":false,"double_click":false,"script":null)
+"events": [Object(InputEventScreenDrag,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"index":-1,"tilt":Vector2(0, 0),"pressure":0.0,"pen_inverted":false,"position":Vector2(0, 0),"relative":Vector2(0, 0),"screen_relative":Vector2(0, 0),"velocity":Vector2(0, 0),"screen_velocity":Vector2(0, 0),"script":null)
 ]
 }
 touch_tap={
 "deadzone": 0.5,
-"events": [Object(InputEventScreenTouch,"resource_local_to_scene":false,"resource_name":"","device":-1,"index":-1,"pressed":false,"canceled":false,"position":Vector2(0, 0),"double_tap":false,"script":null)
+"events": [Object(InputEventScreenTouch,"resource_local_to_scene":false,"resource_name":"","device":-1,"window_id":0,"index":-1,"position":Vector2(0, 0),"canceled":false,"pressed":false,"double_tap":false,"script":null)
 ]
 }
 

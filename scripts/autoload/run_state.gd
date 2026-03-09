@@ -20,7 +20,7 @@ var _status: RunStatus = RunStatus.INACTIVE
 var _current_node_id: String = ""
 var _map_seed: int = 0
 var _nodes: Array = []
-var _team: Array[RunUnit] = []  # Array of RunUnit resources
+var _team: Array[RunUnit] = []
 var _accumulated_rewards: Dictionary = {}
 var _run_start_time: int = 0
 
@@ -29,7 +29,7 @@ var _run_start_time: int = 0
 func start_run(team_preset_id: String) -> void:
 	_status = RunStatus.ACTIVE
 	_map_seed = randi()
-	_run_start_time = Time.get_unix_time_from_system()
+	_run_start_time = int(Time.get_unix_time_from_system())
 
 	# Initialize team from preset
 	_initialize_team(team_preset_id)
@@ -159,7 +159,7 @@ func restore_from_save(save_data: RunSaveData) -> void:
 	if save_data == null:
 		return
 
-	_status = save_data.status
+	_status = save_data.status as RunStatus
 	_current_node_id = save_data.current_node_id
 	_map_seed = save_data.map_seed
 	_nodes = save_data.nodes
@@ -181,7 +181,7 @@ func create_save_data() -> RunSaveData:
 	return save_data
 
 
-func _initialize_team(team_preset_id: String) -> void:
+func _initialize_team(_team_preset_id: String) -> void:
 	_team.clear()
 
 	# TODO: Load actual preset from SaveManager

@@ -21,7 +21,7 @@ var _modal_stack: Array = []
 
 
 ## Change to a new scene with optional transition
-func change_scene(scene_path: String, transition: TransitionType = TransitionType.FADE) -> void:
+func change_scene(scene_path: String, _transition: TransitionType = TransitionType.FADE) -> void:
 	if _is_transitioning:
 		push_warning("Scene change already in progress")
 		return
@@ -74,7 +74,7 @@ func close_all_modals() -> void:
 ## Show a toast notification
 func show_toast(message: String, duration: float = 2.0) -> void:
 	# TODO: Implement toast notification system
-	print("TOAST: ", message)
+	print("TOAST: ", message, " (duration: ", duration, "s)")
 
 
 ## Check if any modal is open

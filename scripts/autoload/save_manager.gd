@@ -59,7 +59,7 @@ func load_player_data() -> PlayerData:
 		return _player_data
 
 	# Load the resource
-	var loaded := load(PLAYER_DATA_PATH)
+	var loaded: Resource = load(PLAYER_DATA_PATH)
 	if loaded == null or not loaded is PlayerData:
 		push_error("Failed to load player data or invalid type")
 		_player_data = _create_default_player_data()
@@ -77,7 +77,7 @@ func save_run_state(data: RunSaveData) -> void:
 		return
 
 	data.save_version = SAVE_VERSION
-	data.save_timestamp = Time.get_unix_time_from_system()
+	data.save_timestamp = int(Time.get_unix_time_from_system())
 
 	var error := ResourceSaver.save(data, RUN_SAVE_PATH)
 	if error != OK:
@@ -89,7 +89,7 @@ func load_run_state() -> RunSaveData:
 	if not ResourceLoader.exists(RUN_SAVE_PATH):
 		return null
 
-	var loaded := load(RUN_SAVE_PATH)
+	var loaded: Resource = load(RUN_SAVE_PATH)
 	if loaded == null or not loaded is RunSaveData:
 		push_error("Failed to load run state or invalid type")
 		return null
