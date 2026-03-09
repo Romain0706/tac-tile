@@ -69,8 +69,8 @@ func set_state(new_state: CellState) -> void:
 	state = new_state
 
 
-## Reset cell to normal state
-func reset_state() -> void:
+## Reset cell to normal state (renamed to avoid Resource method conflict)
+func reset_to_normal() -> void:
 	state = CellState.NORMAL
 
 

@@ -121,7 +121,7 @@ func set_cell_state(col: int, row: int, state: GridCell.CellState) -> void:
 ## Reset all cells to normal state
 func reset_all_cells() -> void:
 	for cell: GridCell in _cells:
-		cell.reset_state()
+		cell.reset_to_normal()
 	queue_redraw()
 
 
