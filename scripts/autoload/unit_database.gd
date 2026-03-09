@@ -41,40 +41,42 @@ func load_units() -> void:
 
 
 ## Get a unit by ID
-func get_unit(unit_id: String) -> Resource:
+func get_unit(unit_id: String) -> UnitData:
 	if not _loaded:
 		load_units()
-	return _units.get(unit_id)
+	return _units.get(unit_id) as UnitData
 
 
 ## Get all units
-func get_all_units() -> Array:
+func get_all_units() -> Array[UnitData]:
 	if not _loaded:
 		load_units()
-	return _units.values()
+	return _units.values() as Array[UnitData]
 
 
 ## Get units filtered by rarity (3, 4, or 5 stars)
-func get_units_by_rarity(rarity: int) -> Array:
+func get_units_by_rarity(rarity: int) -> Array[UnitData]:
 	if not _loaded:
 		load_units()
 
-	var result := []
+	var result: Array[UnitData] = []
 	for unit in _units.values():
-		if unit.get("rarity") == rarity:
-			result.append(unit)
+		var unit_data := unit as UnitData
+		if unit_data and unit_data.rarity == rarity:
+			result.append(unit_data)
 	return result
 
 
 ## Get units filtered by element
-func get_units_by_element(element: String) -> Array:
+func get_units_by_element(element: int) -> Array[UnitData]:
 	if not _loaded:
 		load_units()
 
-	var result := []
+	var result: Array[UnitData] = []
 	for unit in _units.values():
-		if unit.get("element") == element:
-			result.append(unit)
+		var unit_data := unit as UnitData
+		if unit_data and unit_data.element == element:
+			result.append(unit_data)
 	return result
 
 

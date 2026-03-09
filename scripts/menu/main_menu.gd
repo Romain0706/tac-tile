@@ -42,9 +42,9 @@ func _update_currency_display() -> void:
 		return
 
 	if _gold_label:
-		_gold_label.text = str(GameManager.get_currency("gold"))
+		_gold_label.text = str(GameManager.get_gold())
 	if _diamonds_label:
-		_diamonds_label.text = str(GameManager.get_currency("diamonds"))
+		_diamonds_label.text = str(GameManager.get_diamonds())
 
 
 func _on_resources_changed(_type: String, _amount: int) -> void:

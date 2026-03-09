@@ -1,6 +1,7 @@
 ## SaveManager.gd
 ## Persistent data storage and retrieval singleton.
 ## Handles saving/loading player data and run state for crash recovery.
+## Uses Godot's ResourceSaver for native serialization.
 extends Node
 
 # Signals
@@ -13,121 +14,109 @@ const RUN_SAVE_PATH := "user://run_save.tres"
 const SAVE_VERSION := 1
 
 # State
-var _player_data_cache: Dictionary = {}
+var _player_data: PlayerData = null
 
 
 func _ready() -> void:
 	_ensure_save_directory()
 
 
-## Save player data to disk
-func save_player_data(data: Dictionary) -> void:
-	data["save_version"] = SAVE_VERSION
-	data["save_timestamp"] = Time.get_unix_time_from_system()
+## Get the current player data (loads if not cached)
+func get_player_data() -> PlayerData:
+	if _player_data == null:
+		_player_data = load_player_data()
+	return _player_data
 
-	var file := FileAccess.open(PLAYER_DATA_PATH, FileAccess.WRITE)
-	if file == null:
-		push_error("Failed to open player data file for writing: " + str(FileAccess.get_open_error()))
+
+## Save player data to disk using ResourceSaver
+func save_player_data(data: PlayerData = null) -> void:
+	var to_save := data if data != null else _player_data
+	if to_save == null:
+		push_error("No player data to save")
 		return
 
-	var json_string := JSON.stringify(data, "  ")
-	file.store_string(json_string)
-	file.close()
+	# Update timestamp
+	to_save.save_version = SAVE_VERSION
 
-	_player_data_cache = data
+	var error := ResourceSaver.save(to_save, PLAYER_DATA_PATH)
+	if error != OK:
+		push_error("Failed to save player data: " + str(error))
+		return
+
+	_player_data = to_save
 	save_completed.emit()
 
 
-## Load player data from disk
-func load_player_data() -> Dictionary:
-	if not _player_data_cache.is_empty():
-		return _player_data_cache
+## Load player data from disk using ResourceLoader
+func load_player_data() -> PlayerData:
+	# Return cached data if available
+	if _player_data != null:
+		return _player_data
 
-	if not FileAccess.file_exists(PLAYER_DATA_PATH):
-		_player_data_cache = _create_default_player_data()
-		return _player_data_cache
+	# Check if save file exists
+	if not ResourceLoader.exists(PLAYER_DATA_PATH):
+		_player_data = _create_default_player_data()
+		return _player_data
 
-	var file := FileAccess.open(PLAYER_DATA_PATH, FileAccess.READ)
-	if file == null:
-		push_error("Failed to open player data file for reading")
-		_player_data_cache = _create_default_player_data()
-		return _player_data_cache
+	# Load the resource
+	var loaded := load(PLAYER_DATA_PATH)
+	if loaded == null or not loaded is PlayerData:
+		push_error("Failed to load player data or invalid type")
+		_player_data = _create_default_player_data()
+		return _player_data
 
-	var json_string := file.get_as_text()
-	file.close()
-
-	var json := JSON.new()
-	var parse_result := json.parse(json_string)
-	if parse_result != OK:
-		push_error("Failed to parse player data JSON")
-		_player_data_cache = _create_default_player_data()
-		return _player_data_cache
-
-	_player_data_cache = json.data
+	_player_data = loaded as PlayerData
 	load_completed.emit()
-	return _player_data_cache
+	return _player_data
 
 
 ## Save run state for crash recovery
-func save_run_state(run_data: Dictionary) -> void:
-	run_data["save_version"] = SAVE_VERSION
-	run_data["save_timestamp"] = Time.get_unix_time_from_system()
-
-	var file := FileAccess.open(RUN_SAVE_PATH, FileAccess.WRITE)
-	if file == null:
-		push_error("Failed to open run save file for writing")
+func save_run_state(data: RunSaveData) -> void:
+	if data == null:
+		push_error("No run data to save")
 		return
 
-	var json_string := JSON.stringify(run_data, "  ")
-	file.store_string(json_string)
-	file.close()
+	data.save_version = SAVE_VERSION
+	data.save_timestamp = Time.get_unix_time_from_system()
+
+	var error := ResourceSaver.save(data, RUN_SAVE_PATH)
+	if error != OK:
+		push_error("Failed to save run state: " + str(error))
 
 
 ## Load run state for crash recovery
-func load_run_state() -> Dictionary:
-	if not FileAccess.file_exists(RUN_SAVE_PATH):
-		return {}
+func load_run_state() -> RunSaveData:
+	if not ResourceLoader.exists(RUN_SAVE_PATH):
+		return null
 
-	var file := FileAccess.open(RUN_SAVE_PATH, FileAccess.READ)
-	if file == null:
-		return {}
+	var loaded := load(RUN_SAVE_PATH)
+	if loaded == null or not loaded is RunSaveData:
+		push_error("Failed to load run state or invalid type")
+		return null
 
-	var json_string := file.get_as_text()
-	file.close()
-
-	var json := JSON.new()
-	if json.parse(json_string) != OK:
-		return {}
-
-	return json.data
+	return loaded as RunSaveData
 
 
 ## Check if there's a crash recovery available
 func has_crash_recovery() -> bool:
-	return FileAccess.file_exists(RUN_SAVE_PATH)
+	return ResourceLoader.exists(RUN_SAVE_PATH)
 
 
 ## Clear run save data (after run completion or player abandon)
 func clear_run_state() -> void:
-	if FileAccess.file_exists(RUN_SAVE_PATH):
+	if ResourceLoader.exists(RUN_SAVE_PATH):
 		DirAccess.remove_absolute(RUN_SAVE_PATH)
+
+
+## Create a new default player data
+func _create_default_player_data() -> PlayerData:
+	var data := PlayerData.new()
+	data.save_version = SAVE_VERSION
+	# PlayerData already has default starting diamonds (100)
+	return data
 
 
 func _ensure_save_directory() -> void:
 	var dir := DirAccess.open("user://")
 	if dir and not dir.dir_exists("saves"):
 		dir.make_dir("saves")
-
-
-func _create_default_player_data() -> Dictionary:
-	return {
-		"save_version": SAVE_VERSION,
-		"currencies": {
-			"gold": 0,
-			"diamonds": 100  # Starting diamonds for new players
-		},
-		"owned_units": [],
-		"team_presets": [],
-		"settings": {},
-		"tutorial_completed": false
-	}

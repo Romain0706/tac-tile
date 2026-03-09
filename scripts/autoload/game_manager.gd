@@ -8,54 +8,79 @@ signal resources_changed(currency_type: String, new_amount: int)
 signal run_started()
 signal run_ended(victory: bool)
 
-# Constants
-const CURRENCY_GOLD := "gold"
-const CURRENCY_DIAMONDS := "diamonds"
-
 # Enums
 enum GamePhase { MENU, RUN, COMBAT }
 
 # State
 var current_phase: GamePhase = GamePhase.MENU
-var _currencies: Dictionary = {
-	CURRENCY_GOLD: 0,
-	CURRENCY_DIAMONDS: 0
-}
 
 
 func _ready() -> void:
 	# Load saved data on startup
-	_load_player_data()
+	SaveManager.get_player_data()
 
 
-## Get current amount of a currency
-func get_currency(type: String) -> int:
-	return _currencies.get(type, 0)
+## Get the player data resource
+func get_player_data() -> PlayerData:
+	return SaveManager.get_player_data()
 
 
-## Spend currency if sufficient. Returns true if successful.
-func spend_currency(type: String, amount: int) -> bool:
+## Get current gold amount
+func get_gold() -> int:
+	return get_player_data().gold
+
+
+## Get current diamonds amount
+func get_diamonds() -> int:
+	return get_player_data().diamonds
+
+
+## Spend gold if sufficient. Returns true if successful.
+func spend_gold(amount: int) -> bool:
 	if amount < 0:
 		push_error("Cannot spend negative amount")
 		return false
 
-	var current := get_currency(type)
-	if current < amount:
+	var success := get_player_data().spend_gold(amount)
+	if success:
+		resources_changed.emit("gold", get_player_data().gold)
+		_save_player_data()
+	return success
+
+
+## Spend diamonds if sufficient. Returns true if successful.
+func spend_diamonds(amount: int) -> bool:
+	if amount < 0:
+		push_error("Cannot spend negative amount")
 		return false
 
-	_currencies[type] = current - amount
-	resources_changed.emit(type, _currencies[type])
-	return true
+	var success := get_player_data().spend_diamonds(amount)
+	if success:
+		resources_changed.emit("diamonds", get_player_data().diamonds)
+		_save_player_data()
+	return success
 
 
-## Add currency to player's balance
-func add_currency(type: String, amount: int) -> void:
+## Add gold to player's balance
+func add_gold(amount: int) -> void:
 	if amount < 0:
 		push_error("Cannot add negative amount")
 		return
 
-	_currencies[type] = get_currency(type) + amount
-	resources_changed.emit(type, _currencies[type])
+	get_player_data().add_gold(amount)
+	resources_changed.emit("gold", get_player_data().gold)
+	_save_player_data()
+
+
+## Add diamonds to player's balance
+func add_diamonds(amount: int) -> void:
+	if amount < 0:
+		push_error("Cannot add negative amount")
+		return
+
+	get_player_data().add_diamonds(amount)
+	resources_changed.emit("diamonds", get_player_data().diamonds)
+	_save_player_data()
 
 
 ## Start a new run with the given team preset
@@ -85,16 +110,6 @@ func _notification(what: int) -> void:
 			_save_player_data()
 
 
-func _load_player_data() -> void:
-	if SaveManager:
-		var data := SaveManager.load_player_data()
-		if data and data.has("currencies"):
-			_currencies = data.currencies
-
-
 func _save_player_data() -> void:
 	if SaveManager:
-		var data := {
-			"currencies": _currencies
-		}
-		SaveManager.save_player_data(data)
+		SaveManager.save_player_data()
