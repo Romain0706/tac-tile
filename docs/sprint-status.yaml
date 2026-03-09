@@ -13,15 +13,15 @@ current_sprint:
   goal: "Project foundation with grid rendering and unit placement"
   start_date: "2026-03-09"
   end_date: "2026-03-16"
-  status: "planned"
+  status: "in_progress"
   planned_points: 15
-  completed_points: 0
+  completed_points: 3
 
 # Sprint Velocity History
 velocity:
   - sprint: 1
     planned: 15
-    completed: 0
+    completed: 3
     status: "in_progress"
 
 # Sprint Backlog
@@ -29,8 +29,9 @@ sprint_1_stories:
   - story_id: "STORY-001"
     title: "Project Setup & Folder Structure"
     points: 3
-    status: "not_started"
-    assigned_to: null
+    status: "completed"
+    assigned_to: "Claude"
+    completion_date: "2026-03-09"
   - story_id: "STORY-002"
     title: "Grid System - 6x8 Grid Rendering"
     points: 3
@@ -104,7 +105,12 @@ backlog:
     epic: "EPIC-001"
 
 # Completed Stories (empty for new project)
-completed_stories: []
+completed_stories:
+  - story_id: "STORY-001"
+    title: "Project Setup & Folder Structure"
+    points: 3
+    completed_date: "2026-03-09"
+    notes: "Godot project configured, folder structure created, autoloads implemented, main scene ready"
 
 # Blocked Stories (empty for new project)
 blocked_stories: []

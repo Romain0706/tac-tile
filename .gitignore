@@ -1,3 +1,78 @@
 # Godot 4+ specific ignores
+
+# Godot-specific ignored files
 .godot/
+
+# Godot import files
+*.import
+
+# Imported translations (automatically generated from CSV files)
+*.translation
+
+# Mono-specific ignores
+.mono/
+data_*/
+mono_crash.*.json
+
+# Build outputs
 /android/
+/ios/
+*.apk
+*.aab
+*.ipa
+*.zip
+
+# Windows builds
+*.exe
+*.zip
+
+# macOS builds
+*.dmg
+*.app
+
+# Linux builds
+*.x86_64
+*.x86
+
+# Web builds
+*.html
+*.wasm
+*.pck
+
+# Export templates
+export_templates/
+
+# OS/Editor specific files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+*~
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Project-specific
+# Keep docs and bmad
+!docs/
+!bmad/
+!/.vscode/settings.json
+
+# Claude Code settings (keep local settings)
+!.claude/
+
+# Temporary files
+*.tmp
+*.temp
+*.bak
+*.log
+
+# Test output
+tests/output/
