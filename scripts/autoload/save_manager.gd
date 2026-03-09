@@ -9,8 +9,8 @@ signal save_completed()
 signal load_completed()
 
 # Constants
-const PLAYER_DATA_PATH := "user://player_data.tres"
-const RUN_SAVE_PATH := "user://run_save.tres"
+const PLAYER_DATA_PATH := "user://player_data.res"
+const RUN_SAVE_PATH := "user://run_save.res"
 const SAVE_VERSION := 1
 
 # State
@@ -35,7 +35,7 @@ func save_player_data(data: PlayerData = null) -> void:
 		push_error("No player data to save")
 		return
 
-	# Update timestamp
+	# Update save version
 	to_save.save_version = SAVE_VERSION
 
 	var error := ResourceSaver.save(to_save, PLAYER_DATA_PATH)

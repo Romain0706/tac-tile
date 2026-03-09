@@ -14,9 +14,3 @@ extends Resource
 @export var run_start_time: int = 0
 @export var save_version: int = 1
 @export var save_timestamp: int = 0
-
-
-## Mark this resource for saving (needed for sub-resources)
-func _init() -> void:
-	# Ensure sub-resources are saved inline
-	resource_local_to_scene = true

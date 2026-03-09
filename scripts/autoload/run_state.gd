@@ -162,9 +162,9 @@ func restore_from_save(save_data: RunSaveData) -> void:
 	_status = save_data.status as RunStatus
 	_current_node_id = save_data.current_node_id
 	_map_seed = save_data.map_seed
-	_nodes = save_data.nodes
-	_team = save_data.team
-	_accumulated_rewards = save_data.accumulated_rewards
+	_nodes = save_data.nodes.duplicate(true)
+	_team = save_data.team.duplicate()
+	_accumulated_rewards = save_data.accumulated_rewards.duplicate(true)
 	_run_start_time = save_data.run_start_time
 
 
@@ -174,9 +174,9 @@ func create_save_data() -> RunSaveData:
 	save_data.status = _status
 	save_data.current_node_id = _current_node_id
 	save_data.map_seed = _map_seed
-	save_data.nodes = _nodes
-	save_data.team = _team
-	save_data.accumulated_rewards = _accumulated_rewards
+	save_data.nodes = _nodes.duplicate(true)
+	save_data.team = _team.duplicate()
+	save_data.accumulated_rewards = _accumulated_rewards.duplicate(true)
 	save_data.run_start_time = _run_start_time
 	return save_data
 
