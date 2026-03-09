@@ -1,0 +1,20 @@
+# BMAD Method v6 - Project Configuration
+# Generated for: tac'tile
+
+project_name: "tac'tile"
+project_type: "game"
+project_level: 3
+
+# Output folder (relative to project root)
+output_folder: "docs"
+
+# Module-specific settings
+bmm:
+  workflow_status_file: "docs/bmm-workflow-status.yaml"
+  sprint_status_file: "docs/sprint-status.yaml"
+
+# Path configuration
+paths:
+  docs: "docs"
+  stories: "docs/stories"
+  tests: "tests"

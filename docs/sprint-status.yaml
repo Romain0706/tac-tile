@@ -1,0 +1,116 @@
+# Sprint Status: tac'tile
+# Generated: 2026-03-09
+# Project: tac'tile
+
+project_name: "tac'tile"
+sprint_length_weeks: 1
+team_capacity_hours: 20
+points_per_sprint: 15-18
+
+# Current Sprint
+current_sprint:
+  number: 1
+  goal: "Project foundation with grid rendering and unit placement"
+  start_date: "2026-03-09"
+  end_date: "2026-03-16"
+  status: "planned"
+  planned_points: 15
+  completed_points: 0
+
+# Sprint Velocity History
+velocity:
+  - sprint: 1
+    planned: 15
+    completed: 0
+    status: "in_progress"
+
+# Sprint Backlog
+sprint_1_stories:
+  - story_id: "STORY-001"
+    title: "Project Setup & Folder Structure"
+    points: 3
+    status: "not_started"
+    assigned_to: null
+  - story_id: "STORY-002"
+    title: "Grid System - 6x8 Grid Rendering"
+    points: 3
+    status: "not_started"
+    assigned_to: null
+  - story_id: "STORY-003"
+    title: "Grid System - Unit Placement"
+    points: 3
+    status: "not_started"
+    assigned_to: null
+  - story_id: "STORY-004"
+    title: "Grid System - Drag Movement"
+    points: 5
+    status: "not_started"
+    assigned_to: null
+
+# Product Backlog (Prioritized)
+backlog:
+  # Sprint 2: Combat Foundation
+  - story_id: "STORY-005"
+    title: "Grid System - Swap Mechanic"
+    points: 3
+    priority: 1
+    epic: "EPIC-001"
+  - story_id: "STORY-006"
+    title: "Grid System - Movement Timer (4s)"
+    points: 3
+    priority: 1
+    epic: "EPIC-001"
+  - story_id: "STORY-007"
+    title: "Pincer Detection - Horizontal/Vertical"
+    points: 5
+    priority: 1
+    epic: "EPIC-001"
+  - story_id: "STORY-008"
+    title: "Pincer Detection - Corner Pincers"
+    points: 3
+    priority: 2
+    epic: "EPIC-001"
+
+  # Sprint 3-4: Damage & Chains
+  - story_id: "STORY-009"
+    title: "Damage Calculator - Physical Formula"
+    points: 5
+    priority: 2
+    epic: "EPIC-001"
+  - story_id: "STORY-010"
+    title: "Damage Calculator - Magical Formula"
+    points: 3
+    priority: 2
+    epic: "EPIC-001"
+  - story_id: "STORY-011"
+    title: "Damage Calculator - Circle of Carnage"
+    points: 3
+    priority: 2
+    epic: "EPIC-001"
+  - story_id: "STORY-012"
+    title: "Damage Calculator - Elemental Bonus"
+    points: 3
+    priority: 2
+    epic: "EPIC-001"
+  - story_id: "STORY-013"
+    title: "Chain Detection - Row/Column"
+    points: 5
+    priority: 2
+    epic: "EPIC-001"
+  - story_id: "STORY-014"
+    title: "Chain Resolution Order"
+    points: 5
+    priority: 2
+    epic: "EPIC-001"
+
+# Completed Stories (empty for new project)
+completed_stories: []
+
+# Blocked Stories (empty for new project)
+blocked_stories: []
+
+# Notes
+notes:
+  - "Start with STORY-001 for project setup"
+  - "Combat prototype target: Sprint 5"
+  - "Full run loop target: Sprint 8"
