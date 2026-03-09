@@ -29,14 +29,14 @@ enum WeaponType { MELEE, DISTANCE, REACH, MAGIC }
 ## Get scaled stats for a given level (1-5)
 func get_scaled_stats(level: int) -> Dictionary:
 	var clamped_level := clampi(level, 1, 5)
-	var scale := 1.0 + (clamped_level - 1) * 0.2  # 20% per level
+	var scale: float = 1.0 + (clamped_level - 1) * 0.2  # 20% per level
 
 	return {
-		"hp": int(base_hp * scale),
-		"atk": int(base_atk * scale),
-		"def": int(base_def * scale),
-		"matk": int(base_matk * scale),
-		"mdef": int(base_mdef * scale)
+		"hp": int(float(base_hp) * scale),
+		"atk": int(float(base_atk) * scale),
+		"def": int(float(base_def) * scale),
+		"matk": int(float(base_matk) * scale),
+		"mdef": int(float(base_mdef) * scale)
 	}
 
 

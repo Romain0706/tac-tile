@@ -12,12 +12,12 @@ extends Resource
 
 
 ## Create from a unit pull
-static func create_from_pull(unit_id: String, rarity: int) -> OwnedUnit:
+static func create_from_pull(p_unit_id: String, p_rarity: int) -> OwnedUnit:
 	var owned := OwnedUnit.new()
-	owned.unit_id = unit_id
-	owned.rarity = rarity
-	owned.charges = rarity - 1  # First draw gives (rarity - 1) charges
-	owned.obtained_timestamp = Time.get_unix_time_from_system()
+	owned.unit_id = p_unit_id
+	owned.rarity = p_rarity
+	owned.charges = p_rarity - 1  # First draw gives (rarity - 1) charges
+	owned.obtained_timestamp = int(Time.get_unix_time_from_system())
 	return owned
 
 

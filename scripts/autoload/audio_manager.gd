@@ -26,7 +26,7 @@ func _ready() -> void:
 
 
 ## Play background music
-func play_music(track_path: String, fade_duration: float = 1.0) -> void:
+func play_music(track_path: String, _fade_duration: float = 1.0) -> void:
 	if track_path == _current_music_track and _music_player.playing:
 		return
 
@@ -42,7 +42,7 @@ func play_music(track_path: String, fade_duration: float = 1.0) -> void:
 
 
 ## Stop background music
-func stop_music(fade_duration: float = 1.0) -> void:
+func stop_music(_fade_duration: float = 1.0) -> void:
 	# TODO: Implement fade out
 	_music_player.stop()
 	_current_music_track = ""

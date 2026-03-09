@@ -1,8 +1,8 @@
-[gd_scene load_steps=2 format=3 uid="uid://c8xmain_scene"]
+[gd_scene format=3 uid="uid://b7ti76rfwlbyq"]
 
-[ext_resource type="Script" path="res://scripts/main.gd" id="1_main"]
+[ext_resource type="Script" uid="uid://dwkoprjx5dhc4" path="res://scripts/main.gd" id="1_main"]
 
-[node name="Main" type="Control"]
+[node name="Main" type="Control" unique_id=1730642920]
 layout_mode = 3
 anchors_preset = 15
 anchor_right = 1.0
@@ -11,7 +11,7 @@ grow_horizontal = 2
 grow_vertical = 2
 script = ExtResource("1_main")
 
-[node name="ColorRect" type="ColorRect" parent="."]
+[node name="ColorRect" type="ColorRect" parent="." unique_id=1872461894]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -20,7 +20,7 @@ grow_horizontal = 2
 grow_vertical = 2
 color = Color(0.1, 0.1, 0.15, 1)
 
-[node name="VBoxContainer" type="VBoxContainer" parent="."]
+[node name="VBoxContainer" type="VBoxContainer" parent="." unique_id=1689902826]
 layout_mode = 1
 anchors_preset = 15
 anchor_right = 1.0
@@ -29,44 +29,44 @@ grow_horizontal = 2
 grow_vertical = 2
 alignment = 1
 
-[node name="SpacerTop" type="Control" parent="VBoxContainer"]
+[node name="SpacerTop" type="Control" parent="VBoxContainer" unique_id=1005512857]
 custom_minimum_size = Vector2(0, 200)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="TitleLabel" type="Label" parent="VBoxContainer"]
+[node name="TitleLabel" type="Label" parent="VBoxContainer" unique_id=1255256174]
 layout_mode = 2
 theme_override_font_sizes/font_size = 48
 text = "tac'tile"
 horizontal_alignment = 1
 
-[node name="SubtitleLabel" type="Label" parent="VBoxContainer"]
+[node name="SubtitleLabel" type="Label" parent="VBoxContainer" unique_id=158498053]
 layout_mode = 2
 theme_override_font_sizes/font_size = 16
 text = "A Roguelite Tactical RPG"
 horizontal_alignment = 1
 
-[node name="SpacerMiddle" type="Control" parent="VBoxContainer"]
+[node name="SpacerMiddle" type="Control" parent="VBoxContainer" unique_id=683311043]
 custom_minimum_size = Vector2(0, 100)
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="LoadingLabel" type="Label" parent="VBoxContainer"]
+[node name="LoadingLabel" type="Label" parent="VBoxContainer" unique_id=566818334]
 layout_mode = 2
 theme_override_font_sizes/font_size = 20
 text = "Loading..."
 horizontal_alignment = 1
 
-[node name="SpacerBottom" type="Control" parent="VBoxContainer"]
+[node name="SpacerBottom" type="Control" parent="VBoxContainer" unique_id=1835724941]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="VersionLabel" type="Label" parent="VBoxContainer"]
+[node name="VersionLabel" type="Label" parent="VBoxContainer" unique_id=942051889]
 layout_mode = 2
 theme_override_font_sizes/font_size = 14
 text = "v0.1.0"
 horizontal_alignment = 1
 
-[node name="Control" type="Control" parent="VBoxContainer"]
+[node name="Control" type="Control" parent="VBoxContainer" unique_id=1367415575]
 custom_minimum_size = Vector2(0, 50)
 layout_mode = 2

@@ -20,7 +20,7 @@ var _status: RunStatus = RunStatus.INACTIVE
 var _current_node_id: String = ""
 var _map_seed: int = 0
 var _nodes: Array = []
-var _team: Array = []  # Array of RunUnit data
+var _team: Array[RunUnit] = []
 var _accumulated_rewards: Dictionary = {}
 var _run_start_time: int = 0
 
@@ -29,7 +29,7 @@ var _run_start_time: int = 0
 func start_run(team_preset_id: String) -> void:
 	_status = RunStatus.ACTIVE
 	_map_seed = randi()
-	_run_start_time = Time.get_unix_time_from_system()
+	_run_start_time = int(Time.get_unix_time_from_system())
 
 	# Initialize team from preset
 	_initialize_team(team_preset_id)
@@ -78,7 +78,7 @@ func complete_current_node() -> void:
 
 
 ## Get run units (team with current stats)
-func get_run_units() -> Array:
+func get_run_units() -> Array[RunUnit]:
 	return _team
 
 
@@ -87,13 +87,11 @@ func level_up_unit(unit_index: int) -> bool:
 	if unit_index < 0 or unit_index >= _team.size():
 		return false
 
-	var unit: Dictionary = _team[unit_index]
-	var current_level: int = unit.get("level", 1)
-
-	if current_level >= MAX_RUN_LEVEL:
+	var unit := _team[unit_index]
+	if unit.level >= MAX_RUN_LEVEL:
 		return false
 
-	unit["level"] = current_level + 1
+	unit.level_up()
 	_recalculate_unit_stats(unit_index)
 	_save_run_state()
 	return true
@@ -104,15 +102,11 @@ func damage_unit(unit_index: int, damage: int) -> bool:
 	if unit_index < 0 or unit_index >= _team.size():
 		return false
 
-	var unit: Dictionary = _team[unit_index]
-	var current_hp: int = unit.get("current_hp", 0)
-	current_hp = max(0, current_hp - damage)
-	unit["current_hp"] = current_hp
+	var unit := _team[unit_index]
+	unit.take_damage(damage)
 
-	if current_hp <= 0:
-		unit["is_alive"] = false
+	if unit.current_hp <= 0:
 		return true
-
 	return false
 
 
@@ -121,13 +115,8 @@ func heal_unit(unit_index: int, amount: int) -> void:
 	if unit_index < 0 or unit_index >= _team.size():
 		return
 
-	var unit: Dictionary = _team[unit_index]
-	if not unit.get("is_alive", true):
-		return
-
-	var current_hp: int = unit.get("current_hp", 0)
-	var max_hp: int = unit.get("max_hp", 100)
-	unit["current_hp"] = min(max_hp, current_hp + amount)
+	var unit := _team[unit_index]
+	unit.heal(amount)
 
 
 ## Revive a dead unit
@@ -135,13 +124,11 @@ func revive_unit(unit_index: int, hp_percent: float = 0.5) -> bool:
 	if unit_index < 0 or unit_index >= _team.size():
 		return false
 
-	var unit: Dictionary = _team[unit_index]
-	if unit.get("is_alive", true):
+	var unit := _team[unit_index]
+	if unit.is_alive:
 		return false
 
-	unit["is_alive"] = true
-	var max_hp: int = unit.get("max_hp", 100)
-	unit["current_hp"] = int(max_hp * hp_percent)
+	unit.revive(hp_percent)
 	return true
 
 
@@ -167,33 +154,59 @@ func add_rewards(rewards: Dictionary) -> void:
 		_accumulated_rewards[key] = current + rewards[key]
 
 
-func _initialize_team(team_preset_id: String) -> void:
+## Restore run state from a RunSaveData resource
+func restore_from_save(save_data: RunSaveData) -> void:
+	if save_data == null:
+		return
+
+	_status = save_data.status as RunStatus
+	_current_node_id = save_data.current_node_id
+	_map_seed = save_data.map_seed
+	_nodes = save_data.nodes.duplicate(true)
+	_team = save_data.team.duplicate()
+	_accumulated_rewards = save_data.accumulated_rewards.duplicate(true)
+	_run_start_time = save_data.run_start_time
+
+
+## Create a RunSaveData from current state
+func create_save_data() -> RunSaveData:
+	var save_data := RunSaveData.new()
+	save_data.status = _status
+	save_data.current_node_id = _current_node_id
+	save_data.map_seed = _map_seed
+	save_data.nodes = _nodes.duplicate(true)
+	save_data.team = _team.duplicate()
+	save_data.accumulated_rewards = _accumulated_rewards.duplicate(true)
+	save_data.run_start_time = _run_start_time
+	return save_data
+
+
+func _initialize_team(_team_preset_id: String) -> void:
 	_team.clear()
 
 	# TODO: Load actual preset from SaveManager
-	# For now, create placeholder team
+	# For now, create placeholder team using RunUnit resources
 	for i in range(6):
-		_team.append({
-			"unit_id": "placeholder_unit_%d" % i,
-			"level": MIN_RUN_LEVEL,
-			"current_hp": 100,
-			"max_hp": 100,
-			"current_stats": {},
-			"is_alive": true
-		})
+		var run_unit := RunUnit.new()
+		run_unit.unit_id = "placeholder_unit_%d" % i
+		run_unit.level = MIN_RUN_LEVEL
+		run_unit.max_hp = 100
+		run_unit.current_hp = 100
+		run_unit.is_alive = true
+		_team.append(run_unit)
 
 
 func _recalculate_unit_stats(unit_index: int) -> void:
 	if unit_index < 0 or unit_index >= _team.size():
 		return
 
-	var unit: Dictionary = _team[unit_index]
-	var level: int = unit.get("level", 1)
+	var unit := _team[unit_index]
 
 	# TODO: Get base stats from UnitDatabase and scale by level
 	# Placeholder stat scaling
-	unit["max_hp"] = 100 + (level - 1) * 20
-	unit["current_hp"] = min(unit.get("current_hp", 100), unit["max_hp"])
+	var new_max_hp := 100 + (unit.level - 1) * 20
+	unit.max_hp = new_max_hp
+	unit.current_hp = min(unit.current_hp, new_max_hp)
 
 
 func _generate_map() -> void:
@@ -218,13 +231,5 @@ func _save_run_state() -> void:
 	if not SaveManager:
 		return
 
-	var run_data := {
-		"status": _status,
-		"current_node_id": _current_node_id,
-		"map_seed": _map_seed,
-		"nodes": _nodes,
-		"team": _team,
-		"accumulated_rewards": _accumulated_rewards,
-		"run_start_time": _run_start_time
-	}
-	SaveManager.save_run_state(run_data)
+	var save_data := create_save_data()
+	SaveManager.save_run_state(save_data)
